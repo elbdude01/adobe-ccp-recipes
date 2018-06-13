@@ -390,7 +390,11 @@ class CreativeCloudPackager(Processor):
         # Save PackageInfo.txt
         packageinfo = os.path.join(expected_output_root, "PackageInfo.txt")
         if os.path.exists(packageinfo):
-            self.env["package_info_text"] = open(packageinfo, 'r').read()
+            pkginfotmp = open(packageinfo, 'r').read()
+            if isinstance(pkginfotmp, unicode):
+                self.env["package_info_text"] = pkginfotmp
+            else:
+                self.env["package_info_text"] = pkginfotmp.decode('utf8')
 
         ccp_path = os.path.join(expected_output_root, 'Build/{}.ccp'.format(self.env["package_name"]))
         if os.path.exists(ccp_path):
